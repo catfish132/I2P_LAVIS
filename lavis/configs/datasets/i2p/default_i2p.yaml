@@ -1,0 +1,19 @@
+datasets:
+  i2p: # name of the dataset builder
+#    dataset_card: dataset_card/avsd_dialogue.md # path to the dataset card
+    data_type: images # [images|videos|features] we use features in this case for extracted video features
+
+    build_info:
+      # Be careful not to append minus sign (-) before split to avoid itemizing
+      annotations:
+        train:
+          url: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/train.json"
+          storage: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/train.json"
+        val:
+          url: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/val.json"
+          storage: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/val.json"
+        test:
+          url: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/test.json"
+          storage: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/test.json"
+      images:
+        storage: "/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/image/"

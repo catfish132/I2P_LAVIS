@@ -67,6 +67,48 @@ class BlipCaptionProcessor(BaseProcessor):
 
         return caption
 
+@registry.register_processor("i2p_caption")
+class I2pCaptionProcessor(BaseProcessor):
+    def __init__(self, prompt="", max_words=200):
+        self.prompt = prompt
+        self.max_words = max_words
+
+    def __call__(self, caption):
+        caption = self.prompt + self.pre_caption(caption)
+
+        return caption
+
+    @classmethod
+    def from_config(cls, cfg=None):
+        if cfg is None:
+            cfg = OmegaConf.create()
+
+        prompt = cfg.get("prompt", "")
+        max_words = cfg.get("max_words", 50)
+
+        return cls(prompt=prompt, max_words=max_words)
+
+    def pre_caption(self, caption):
+        caption = re.sub(
+            r"([.!\"()*#:;~])",
+            " ",
+            caption.lower(),
+        )
+        caption = re.sub(
+            r"\s{2,}",
+            " ",
+            caption,
+        )
+        caption = caption.rstrip("\n")
+        caption = caption.strip(" ")
+
+        # truncate caption
+        caption_words = caption.split(" ")
+        if len(caption_words) > self.max_words:
+            caption = " ".join(caption_words[: self.max_words])
+
+        return caption
+
 
 @registry.register_processor("blip_question")
 class BlipQuestionProcessor(BaseProcessor):

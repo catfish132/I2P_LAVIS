@@ -17,6 +17,10 @@ from lavis.datasets.datasets.video_caption_datasets import (
     VideoCaptionDataset,
     VideoCaptionEvalDataset,
 )
+from lavis.datasets.datasets.i2p_datasets import (
+I2pDataset,
+I2pEvalDataset
+)
 
 
 @registry.register_builder("coco_caption")
@@ -65,4 +69,14 @@ class VATEXCapBuilder(BaseDatasetBuilder):
 
     DATASET_CONFIG_DICT = {
         "default": "configs/datasets/vatex/defaults_cap.yaml",
+    }
+
+
+@registry.register_builder("i2p")
+class I2pBuilder(BaseDatasetBuilder):
+    train_dataset_cls = I2pDataset
+    eval_dataset_cls = I2pEvalDataset
+
+    DATASET_CONFIG_DICT = {
+        "default": "configs/datasets/i2p/default_i2p.yaml"
     }
