@@ -17,7 +17,7 @@ from lavis.tasks.vqa import VQATask, GQATask, AOKVQATask
 from lavis.tasks.vqa_reading_comprehension import VQARCTask, GQARCTask
 from lavis.tasks.dialogue import DialogueTask
 from lavis.tasks.i2p_captioning import I2pCaptionTask
-
+from lavis.tasks.room_captioning import RoomCaptionTask
 
 def setup_task(cfg):
     assert "task" in cfg.run_cfg, "Task name must be provided."
@@ -43,5 +43,6 @@ __all__ = [
     # "VisualEntailmentTask",
     "ImageTextPretrainTask",
     "DialogueTask",
-    "I2pCaptionTask"
+    "I2pCaptionTask",
+    'RoomCaptionTask'
 ]

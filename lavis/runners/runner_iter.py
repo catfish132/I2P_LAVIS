@@ -50,7 +50,7 @@ class RunnerIter(RunnerBase):
             self.config.run_cfg.get("iters_per_inner_epoch", -1)
         )
         assert (
-            self.iters_per_inner_epoch > 0
+                self.iters_per_inner_epoch > 0
         ), "iters_per_inner_epoch must be greater than 0."
 
     @property
@@ -80,7 +80,7 @@ class RunnerIter(RunnerBase):
             self._load_checkpoint(self.resume_ckpt_path)
 
         for start_iters in range(
-            self.start_iters, self.max_iters, self.iters_per_inner_epoch
+                self.start_iters, self.max_iters, self.iters_per_inner_epoch
         ):
             end_iters = start_iters + self.iters_per_inner_epoch
 
@@ -106,11 +106,11 @@ class RunnerIter(RunnerBase):
                     if val_log is not None:
                         if is_main_process():
                             assert (
-                                "agg_metrics" in val_log
+                                    "agg_metrics" in val_log
                             ), "No agg_metrics found in validation log."
 
                             agg_metrics = val_log["agg_metrics"]
-                            if agg_metrics > best_agg_metric and split_name == "val":
+                            if agg_metrics > best_agg_metric:  # and split_name == "val"
                                 best_iters, best_agg_metric = end_iters, agg_metrics
 
                                 self._save_checkpoint(end_iters, is_best=True)
@@ -253,7 +253,7 @@ class RunnerIter(RunnerBase):
             # print dataset statistics after concatenation/chaining
             for split_name in self.datasets:
                 if isinstance(self.datasets[split_name], tuple) or isinstance(
-                    self.datasets[split_name], list
+                        self.datasets[split_name], list
                 ):
                     # mixed wds.DataPipeline and torch.utils.data.Dataset
                     num_records = sum(

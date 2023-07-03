@@ -27,7 +27,7 @@ class BlipImageBaseProcessor(BaseProcessor):
 
 @registry.register_processor("blip_caption")
 class BlipCaptionProcessor(BaseProcessor):
-    def __init__(self, prompt="", max_words=50):
+    def __init__(self, prompt="", max_words=400):
         self.prompt = prompt
         self.max_words = max_words
 

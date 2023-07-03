@@ -15,7 +15,7 @@ from app import classification as cl
 
 if __name__ == "__main__":
     app = MultiPage()
-
+    print("main!!!!!!!")
     app.add_page("Image Description Generation", caption.app)
     app.add_page("Multimodal Search", ms.app)
     app.add_page("Visual Question Answering", vqa.app)

@@ -36,8 +36,8 @@ def read_img(filepath):
     },
     allow_output_mutation=True,
 )
-def load_model_cache(name, model_type, is_eval, device):
-    return load_model(name, model_type, is_eval, device)
+def load_model_cache(name, model_type, is_eval, device, checkpoint):
+    return load_model(name, model_type, is_eval, device, checkpoint)
 
 
 @st.cache(allow_output_mutation=True)
@@ -60,8 +60,8 @@ def getAttMap(img, attMap, blur=True, overlap=True):
     attMapV = np.delete(attMapV, 3, 2)
     if overlap:
         attMap = (
-            1 * (1 - attMap**0.7).reshape(attMap.shape + (1,)) * img
-            + (attMap**0.7).reshape(attMap.shape + (1,)) * attMapV
+                1 * (1 - attMap ** 0.7).reshape(attMap.shape + (1,)) * img
+                + (attMap ** 0.7).reshape(attMap.shape + (1,)) * attMapV
         )
     return attMap
 

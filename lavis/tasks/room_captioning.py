@@ -14,8 +14,8 @@ from lavis.tasks.base_task import BaseTask
 from nlg_metrics import compute_scores
 
 
-@registry.register_task("i2p_captioning")
-class I2pCaptionTask(BaseTask):
+@registry.register_task("room_captioning")
+class RoomCaptionTask(BaseTask):
     def __init__(self, num_beams, max_len, min_len, evaluate, report_metric=True):
         super().__init__()
 
@@ -84,7 +84,7 @@ class I2pCaptionTask(BaseTask):
     def _report_metrics(self, eval_result_file, split_name):
 
         # TODO better way to define this
-        gt_root = '/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/image2prompt/test_cache.json'
+        gt_root = '/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/Room/test_cache.json'
         id2gts = json.load(open(gt_root, 'r'))
         id2res = json.load(open(eval_result_file, 'r'))
         # convert list to dict

@@ -22,6 +22,11 @@ I2pDataset,
 I2pEvalDataset
 )
 
+from lavis.datasets.datasets.room_datasets import (
+RoomDataset,
+RoomEvalDataset
+)
+
 
 @registry.register_builder("coco_caption")
 class COCOCapBuilder(BaseDatasetBuilder):
@@ -79,4 +84,14 @@ class I2pBuilder(BaseDatasetBuilder):
 
     DATASET_CONFIG_DICT = {
         "default": "configs/datasets/i2p/default_i2p.yaml"
+    }
+
+@registry.register_builder("room")
+class RoomBuilder(BaseDatasetBuilder):
+    train_dataset_cls = RoomDataset
+    eval_dataset_cls = RoomEvalDataset
+
+    DATASET_CONFIG_DICT = {
+        "default": "configs/datasets/room/default_room.yaml",
+        "huaban": "configs/datasets/room/huaban_room.yaml"
     }

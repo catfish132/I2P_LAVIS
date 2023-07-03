@@ -15,6 +15,9 @@ from PIL import Image
 def app():
     # ===== layout =====
     model_type = st.sidebar.selectbox("Model:", ["BLIP_base", "BLIP_large"])
+    checkpoint_path = st.sidebar.selectbox("Checkpoint", [
+        "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/3vj_Room/20230706080/checkpoint_best.pth",
+        "teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/Huaban_Room/20230706080/checkpoint_best.pth"])
 
     sampling_method = st.sidebar.selectbox(
         "Sampling method:", ["Beam search", "Nucleus sampling"]
@@ -50,7 +53,7 @@ def app():
 
     # ==== event ====
     vis_processor = load_processor("blip_image_eval").build(image_size=384)
-
+    print('print!!!!!!!!!!!')
     if cap_button:
         if model_type.startswith("BLIP"):
             blip_type = model_type.split("_")[1].lower()
@@ -59,8 +62,9 @@ def app():
                 model_type=f"{blip_type}_coco",
                 is_eval=True,
                 device=device,
+                checkpoint="/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/Huaban_Room/20230706093/checkpoint_best.pth"
             )
-
+        model.load_checkpoint("/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/Huaban_Room/20230706093/checkpoint_best.pth")
         img = vis_processor(raw_img).unsqueeze(0).to(device)
         captions = generate_caption(
             model=model, image=img, use_nucleus_sampling=not use_beam
@@ -70,7 +74,7 @@ def app():
 
 
 def generate_caption(
-    model, image, use_nucleus_sampling=False, num_beams=3, max_length=40, min_length=5
+        model, image, use_nucleus_sampling=False, num_beams=3, max_length=40, min_length=5
 ):
     samples = {"image": image}
 

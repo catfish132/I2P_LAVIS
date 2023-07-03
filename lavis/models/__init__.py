@@ -110,8 +110,9 @@ def load_model(name, model_type, is_eval=False, device="cpu", checkpoint=None):
     """
 
     model = registry.get_model_class(name).from_pretrained(model_type=model_type)
-
+    print('checking model!!!!!!!!!!!',checkpoint)
     if checkpoint is not None:
+        print("Checkpoint!!!!!!!!!!!!")
         model.load_checkpoint(checkpoint)
 
     if is_eval:

@@ -10,7 +10,7 @@ from lavis.datasets.builders.caption_builder import (
     COCOCapBuilder,
     MSRVTTCapBuilder,
     MSVDCapBuilder,
-    VATEXCapBuilder,
+    VATEXCapBuilder, RoomBuilder,
 )
 from lavis.datasets.builders.image_text_pair_builder import (
     ConceptualCaption12MBuilder,
@@ -63,7 +63,8 @@ __all__ = [
     "VGCaptionBuilder",
     "VGVQABuilder",
     "AVSDDialBuilder",
-    "I2pBuilder"
+    "I2pBuilder",
+    'RoomBuilder'
 ]
 
 
