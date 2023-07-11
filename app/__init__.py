@@ -12,15 +12,13 @@ import streamlit as st
 import torch
 
 
-@st.cache()
+@st.cache_data()
 def load_demo_image():
     img_url = (
-        "https://storage.googleapis.com/sfr-vision-language-research/BLIP/demo.jpg"
+        "//3vj-render.3vjia.com//UpFile_Render/C00000022/DesignSchemeRenderFile/201708/3/05629590/4ae9c0895e214857916b7ceb93740e9c.jpg"
     )
     raw_image = Image.open(requests.get(img_url, stream=True).raw).convert("RGB")
     return raw_image
-
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 cache_root = "/export/home/.cache/lavis/"
