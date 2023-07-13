@@ -27,6 +27,11 @@ RoomDataset,
 RoomEvalDataset
 )
 
+from lavis.datasets.datasets.minicoco_datasets import (
+MinicocoDataset,
+MinicocoEvalDataset
+)
+
 
 @registry.register_builder("coco_caption")
 class COCOCapBuilder(BaseDatasetBuilder):
@@ -94,4 +99,13 @@ class RoomBuilder(BaseDatasetBuilder):
     DATASET_CONFIG_DICT = {
         "default": "configs/datasets/room/default_room.yaml",
         "huaban": "configs/datasets/room/huaban_room.yaml"
+    }
+
+@registry.register_builder("minicoco")
+class MinicocoBuilder(BaseDatasetBuilder):
+    train_dataset_cls = MinicocoDataset
+    eval_dataset_cls = MinicocoEvalDataset
+
+    DATASET_CONFIG_DICT = {
+        "default": "configs/datasets/minicoco/default_minicoco.yaml"
     }

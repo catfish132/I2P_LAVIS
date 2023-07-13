@@ -68,7 +68,11 @@ def load_model():
     #         # checkpoint="/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/3vj_Room/20230707100/checkpoint_best.pth"
     #     )
     model.load_checkpoint(
-        "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/3vj_Room/20230707100/checkpoint_best.pth")
+        '/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco/20230712072/checkpoint_best.pth'
+        )
+    #3vj_room:"/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/3vj_Room/20230707100/checkpoint_best.pth"
+    #mini_coco:'/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco/20230712072/checkpoint_best.pth'
+    # huaban_room:
     model.to(device)
     return model, vis_processors
 

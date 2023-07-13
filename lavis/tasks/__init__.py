@@ -44,5 +44,6 @@ __all__ = [
     "ImageTextPretrainTask",
     "DialogueTask",
     "I2pCaptionTask",
-    'RoomCaptionTask'
+    'RoomCaptionTask',
+    'minicoco_captioning'
 ]

@@ -36,6 +36,7 @@ from lavis.datasets.builders.retrieval_builder import (
     COCORetrievalBuilder,
     Flickr30kBuilder,
 )
+from lavis.datasets.builders.caption_builder import MinicocoBuilder
 from lavis.datasets.builders.dialogue_builder import AVSDDialBuilder
 from lavis.datasets.builders.caption_builder import I2pBuilder
 from lavis.common.registry import registry
@@ -64,7 +65,8 @@ __all__ = [
     "VGVQABuilder",
     "AVSDDialBuilder",
     "I2pBuilder",
-    'RoomBuilder'
+    'RoomBuilder',
+    'MinicocoBuilder'
 ]
 
 
