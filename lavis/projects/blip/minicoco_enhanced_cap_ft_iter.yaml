@@ -5,7 +5,7 @@
 
 model:
   arch: blip_caption
-  model_type: large_coco
+  model_type: blip_img2tag
 
 datasets:
   minicoco: # name of the dataset builder
@@ -26,7 +26,7 @@ run:
   runner: runner_iter
 
   max_iters: 4e4
-  iters_per_inner_epoch: 2000 #2e3
+  iters_per_inner_epoch: 1000 #2e3
 
   # task: retrieval
   task: minicoco_captioning #captioning
@@ -44,7 +44,7 @@ run:
   num_beams: 1
 
   seed: 42
-  output_dir: "output/minicoco_enhanced"
+  output_dir: "output/minicoco_enhanced_maxlen"
 
   amp: False
   resume_ckpt_path: null
