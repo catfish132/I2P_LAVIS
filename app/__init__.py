@@ -15,7 +15,7 @@ import torch
 @st.cache_data()
 def load_demo_image():
     img_url = (
-        "//3vj-render.3vjia.com//UpFile_Render/C00000022/DesignSchemeRenderFile/201708/3/05629590/4ae9c0895e214857916b7ceb93740e9c.jpg"
+        "https://img.zcool.cn/community/0166d45de3e040a80120686b85c32c.jpg@1280w_1l_2o_100sh.jpg"
     )
     raw_image = Image.open(requests.get(img_url, stream=True).raw).convert("RGB")
     return raw_image

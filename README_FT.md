@@ -62,6 +62,7 @@ https://opensource.salesforce.com/LAVIS/latest/tutorial.processors.html
 建议使用缓存修饰器，以加速推理
 命令：streamlit run app/caption.py --server.fileWatcherType none
 部署需要至少12GB显存的机器
+加载需要较长时间
 ![img.png](img.png)
 
 # 调整生成句子长度
@@ -75,3 +76,4 @@ https://opensource.salesforce.com/LAVIS/latest/tutorial.processors.html
 3. 开放域image2tags任务在训练一些迭代之后都出现验证指标下降的问题，但是loss相对而言没有很低。这很可能是因为开放域涉及的场景多样，数据量太少（3000的数据量，2000次迭代已经过了35个epochs了），测试集和训练集可能有些分布不一致,专业域的场景特定，测试集与训练集的分布比较接近。
 4. 开放域任务需要更多的数据量，专业域数据在1000左右应该就够用了
 5. RAM增强可以丰富tags，同时也会引入同义词噪声，Mini GPT4单独生成风格化tags的能力不够强
+6. 开发域模型在目前数据集下过拟合现象比较明显，主要是对coco分布过拟合，输入真实照片泛化性不够。
