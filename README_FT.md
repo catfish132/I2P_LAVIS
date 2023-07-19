@@ -20,9 +20,12 @@ https://opensource.salesforce.com/LAVIS/latest/tutorial.processors.html
    1. 从COCO测试集中挑选了3000张图片
    2. 数据集路径："/teams/ai_model_1667305326/WujieAITeam/private/jyd/dataset/minicoco/"
    3. 模型路径："/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco/checkpoint_best.pth"
-5. run python train.py --cfg-path <yaml_path>  可以参考run_scripts/blip/train/train_caption_coco_large_iters.sh
-6. BLIP训练需要至少40GB显存，用A6000或者A40
-7. MiniGPT4的项目框架跟LAVIS是基本一致的,其使用BLIP2的框架，建议只微调第二阶段，用A100.
+5. minicoco_enhanced: lavis/projects/blip/minicoco_enhanced_cap_ft_iter.yaml
+   1. 在4的基础上，添加ram推理的tags
+   2. 数据集使用enhanced_train和enhanced_test
+6. run python train.py --cfg-path <yaml_path>  可以参考run_scripts/blip/train/train_caption_coco_large_iters.sh
+7. BLIP训练需要至少40GB显存，用A6000或者A40
+8. MiniGPT4的项目框架跟LAVIS是基本一致的,其使用BLIP2的框架，建议只微调第二阶段，用A100.
 
 # 数据集说明
 1. train.json:训练集的标注
@@ -59,8 +62,12 @@ https://opensource.salesforce.com/LAVIS/latest/tutorial.processors.html
 建议使用缓存修饰器，以加速推理
 命令：streamlit run app/caption.py --server.fileWatcherType none
 部署需要至少12GB显存的机器
+![img.png](img.png)
 
-# 问题
+# TODO
 1. i2p任务需要对文本进一步预处理，prompt中带有各种括号和特殊字符，是正常caption中没有的
 2. BLIP模型目前没能生成足够长的文本，调整最大序列长度也没有显著效果
 3. 还没有广泛调参
+4. 开放域image2tags任务在训练一些迭代之后都出现验证指标下降的问题，但是loss相对而言没有很低。这很可能是因为开放域涉及的场景多样，数据量太少（3000的数据量，2000次迭代已经过了35个epochs了），测试集和训练集可能有些分布不一致,专业域的场景特定，测试集与训练集的分布比较接近。
+5. 开放域任务需要更多的数据量，专业域数据在1000左右就够用了
+6. RAM增强可以丰富tags，同时也会引入同义词噪声，Mini GPT4单独生成风格化tags的能力不够强

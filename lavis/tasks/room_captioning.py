@@ -93,6 +93,6 @@ class RoomCaptionTask(BaseTask):
             tmp[str(dic['image_id'])] = [dic['caption']]
         id2res = tmp
         score = compute_scores(id2gts, id2res)
-        score["agg_metrics"] = score['BLEU_4']
+        score["agg_metrics"] = score['BLEU_1']
 
         return score

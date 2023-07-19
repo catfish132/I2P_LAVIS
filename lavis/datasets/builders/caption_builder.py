@@ -107,5 +107,6 @@ class MinicocoBuilder(BaseDatasetBuilder):
     eval_dataset_cls = MinicocoEvalDataset
 
     DATASET_CONFIG_DICT = {
-        "default": "configs/datasets/minicoco/default_minicoco.yaml"
+        "default": "configs/datasets/minicoco/default_minicoco.yaml",
+        "enhanced": "configs/datasets/minicoco/minicoco_enhanced.yaml"
     }
