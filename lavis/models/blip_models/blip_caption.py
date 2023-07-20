@@ -35,7 +35,8 @@ class BlipCaption(BlipBase):
     PRETRAINED_MODEL_CONFIG_DICT = {
         "base_coco": "configs/models/blip_caption_base_coco.yaml",
         "large_coco": "configs/models/blip_caption_large_coco.yaml",
-        "blip_img2tag": "configs/models/blip_img2tag.yaml"
+        "blip_img2tag": "configs/models/blip_img2tag.yaml",
+        "blip_i2p": "configs/models/blip_i2p.yaml"
     }
 
     def __init__(self, image_encoder, text_decoder, prompt=None, max_txt_len=40):

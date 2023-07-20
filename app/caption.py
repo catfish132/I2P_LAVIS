@@ -22,6 +22,7 @@ from app.utils import load_model_cache
 from lavis.models import load_model_and_preprocess
 from lavis.processors import load_processor
 from PIL import Image
+import streamlit.components.v1 as components
 
 
 def clean(strs):
@@ -51,13 +52,18 @@ def app():
     with st.sidebar:
         st.write("推荐使用maxlen后缀的模型，他们可以生成更长的tags")
         model_type = st.selectbox(
-            "model type:", ["minicoco_enhanced_maxlen", "3vj_room_maxlen", "3vj_room", "minicoco", "huaban_room",
-                            "minicoco_enhanced_ram"]
+            "model type:",
+            ["minicoco_enhanced_maxlen", "3vj_room_maxlen", "img2prompt_maxlen", "3vj_room", "minicoco", "huaban_room",
+             "minicoco_enhanced_ram"]
         )
         st.write("beam_search 会影响推理速度,提升推理质量，选择1即不使用")
         beam_search = st.selectbox(
             "beam search", [1, 2, 3, 4, 5]
         )
+        st.write("最大生成长度,默认100，img2prompt可选择200")
+        max_l = st.slider('MAX SEQ LENGTH', value=100, max_value=200, min_value=0)
+        st.write("最小生成长度，默认10")
+        min_l = st.slider('MIN SEQ LENGTH', value=10, max_value=200, min_value=0)
 
     instructions = """Try the provided image or upload your own:"""
     file = st.file_uploader(instructions)
@@ -65,6 +71,11 @@ def app():
     col1, col2 = st.columns(2)
     button_bar, oringal_out = st.columns(2)
 
+    # embed streamlit docs in a streamlit app  跨域无法嵌套
+    # st.write("CLIP-Interrogator")
+    # components.iframe("https://huggingface.co/spaces/pharma/CLIP-Interrogator", width=1000, height=500, scrolling=True)
+    # st.write("deepdanbooru")
+    # components.iframe("http://dev.kanotype.net:8003/deepdanbooru/", width=1000, height=500, scrolling=True)  # http://dev.kanotype.net:8003/deepdanbooru/
     if file:
         raw_img = Image.open(file).convert("RGB")
     else:
@@ -98,8 +109,8 @@ def app():
         out = model.generate({"image": img},
                              use_nucleus_sampling=False,
                              num_beams=beam_search,
-                             max_length=100,
-                             min_length=10)
+                             max_length=max_l,
+                             min_length=min_l)
         output = clean(out[0])
         col2.write(output, use_column_width=True)
         oringal_out.write(out[0], use_column_width=True)
@@ -125,7 +136,8 @@ def load(model, model_type="minicoco_enhanced_maxlen"):
         "minicoco": '/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco/20230712072/checkpoint_best.pth',
         "huaban_room": "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/Huaban_Room/checkpoint_best.pth",
         "minicoco_enhanced_ram": "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco_enhanced/checkpoint_best.pth",
-        "minicoco_enhanced_maxlen": "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco_enhanced_maxlen/20230720025/checkpoint_best.pth"
+        "minicoco_enhanced_maxlen": "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/minicoco_enhanced_maxlen/20230720025/checkpoint_best.pth",
+        "img2prompt_maxlen": "/teams/ai_model_1667305326/WujieAITeam/private/jyd/img2prompt/LAVIS/lavis/output/I2P_maxlen/20230720073/checkpoint_best.pth"
     }
     model.load_checkpoint(model_map[model_type])
     return model
