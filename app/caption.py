@@ -13,16 +13,26 @@ current_dir = os.getcwd()
 # print('cwd:' + current_dir)
 # 将当前工作目录添加到 sys.path 的开头
 sys.path.insert(0, current_dir)
-
+sys.path.append("/teams/ai_model_1667305326/WujieAITeam/private/jyd/CV/recognize-anything/")
+sys.path.append("/teams/ai_model_1667305326/WujieAITeam/private/jyd/CV/FastSAM-main/")
 import streamlit as st
 import torch.types
 
 from app import device, load_demo_image
 from app.utils import load_model_cache
 from lavis.models import load_model_and_preprocess
-from lavis.processors import load_processor
 from PIL import Image
 import streamlit.components.v1 as components
+# RAM
+from ram.models import ram
+from ram import inference_ram as inference
+from ram import get_transform
+# clip_interrogator
+from PIL import Image
+from clip_interrogator import Config, Interrogator
+
+
+# SAM
 
 
 def clean(strs):
@@ -64,18 +74,18 @@ def app():
         max_l = st.slider('MAX SEQ LENGTH', value=100, max_value=200, min_value=0)
         st.write("最小生成长度，默认10")
         min_l = st.slider('MIN SEQ LENGTH', value=10, max_value=200, min_value=0)
+        st.write('Use the Clip interrogator, this will cost a lot of time')
+        use_ci = st.selectbox("USE CI", [False, True])
 
     instructions = """Try the provided image or upload your own:"""
     file = st.file_uploader(instructions)
 
     col1, col2 = st.columns(2)
+    CI_out, ram_bar = st.columns(2)
     button_bar, oringal_out = st.columns(2)
+    ram_bar.header('RAM Result')
+    CI_out.header('CLIP Interrogator Result')
 
-    # embed streamlit docs in a streamlit app  跨域无法嵌套
-    # st.write("CLIP-Interrogator")
-    # components.iframe("https://huggingface.co/spaces/pharma/CLIP-Interrogator", width=1000, height=500, scrolling=True)
-    # st.write("deepdanbooru")
-    # components.iframe("http://dev.kanotype.net:8003/deepdanbooru/", width=1000, height=500, scrolling=True)  # http://dev.kanotype.net:8003/deepdanbooru/
     if file:
         raw_img = Image.open(file).convert("RGB")
     else:
@@ -86,7 +96,7 @@ def app():
     w, h = raw_img.size
     scaling_factor = 720 / w
     resized_image = raw_img.resize((int(w * scaling_factor), int(h * scaling_factor)))
-    col1.image(resized_image, use_column_width=True)
+    col1.image(resized_image)
     col2.header("Cleaned Tags")
 
     with button_bar:
@@ -100,22 +110,54 @@ def app():
     with oringal_out:
         st.header("The original output without clean")
 
-    model, vis_processors = init_model()
+    blip_model, vis_processors = init_model()
+    ram_model, ram_transform = load_RAM()
+    ci = load_CI()
 
     if reload_model:
-        model = load(model, model_type)
+        blip_model = load(blip_model, model_type)
     if cap_button:
         img = vis_processors["eval"](raw_img).unsqueeze(0).to(device)
-        out = model.generate({"image": img},
-                             use_nucleus_sampling=False,
-                             num_beams=beam_search,
-                             max_length=max_l,
-                             min_length=min_l)
-        output = clean(out[0])
-        col2.write(output, use_column_width=True)
-        oringal_out.write(out[0], use_column_width=True)
+        out = blip_model.generate({"image": img},
+                                  use_nucleus_sampling=False,
+                                  num_beams=beam_search,
+                                  max_length=max_l,
+                                  min_length=min_l)
+        blip_output = clean(out[0])
+        col2.write(blip_output)
+        oringal_out.write(out[0])
+        # inference RAM
+        ram_image = ram_transform(raw_img).unsqueeze(0).to(device)
+
+        ram_res = inference(ram_image, ram_model)
+        ram_bar.write(ram_res[0])
+        # interrogator
+        if use_ci:
+            ci_res = ci.interrogate(raw_img)
+            CI_out.write(ci_res)
 
 
+@st.cache_resource
+def load_RAM():
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    transform = get_transform(image_size=384)
+
+    #######load model
+    model = ram(
+        pretrained="/teams/ai_model_1667305326/WujieAITeam/private/jyd/CV/recognize-anything/pretrained/ram_swin_large_14m.pth",
+        image_size=384,
+        vit='swin_l')
+    model.eval()
+
+    model = model.to(device)
+    return model, transform
+
+@st.cache_resource
+def load_CI():
+    return Interrogator(Config(clip_model_name="ViT-L-14/openai"))
+
+# @st.cache_resource
 @st.cache_resource
 def init_model():
     model, vis_processors, _ = load_model_and_preprocess(name="blip_caption", model_type="blip_img2tag", is_eval=True,
@@ -141,35 +183,5 @@ def load(model, model_type="minicoco_enhanced_maxlen"):
     }
     model.load_checkpoint(model_map[model_type])
     return model
-
-
-# def generate_caption(
-#         model, image, use_nucleus_sampling=False, num_beams=3, max_length=40, min_length=5
-# ):
-#     samples = {"image": image}
-#
-#     captions = []
-#     if use_nucleus_sampling:
-#         for _ in range(5):
-#             caption = model.generate(
-#                 samples,
-#                 use_nucleus_sampling=True,
-#                 max_length=max_length,
-#                 min_length=min_length,
-#                 top_p=0.9,
-#             )
-#             captions.append(caption[0])
-#     else:
-#         caption = model.generate(
-#             samples,
-#             use_nucleus_sampling=False,
-#             num_beams=num_beams,
-#             max_length=max_length,
-#             min_length=min_length,
-#         )
-#         captions.append(caption[0])
-#
-#     return captions
-
 
 app()
